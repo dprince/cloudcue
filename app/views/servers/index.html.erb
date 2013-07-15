@@ -1,0 +1,35 @@
+<div id="servers" class="ui-widget">
+
+<script>
+
+    globalRefreshURL="/servers"
+    globalRefreshDivId="#servers-table"
+
+    $(document).ready(function() {
+        server_selectors();
+    });
+
+</script>
+
+<div class="title">
+<h3>Servers</h3>
+</div>
+
+<form name="form_server_group_servers">
+	Select a group:
+	<select id="server_group_select" name="server_group_id">
+	<%= 
+	sg_arr = [['', '']]
+	@server_groups.collect { |sg| [h("#{sg.name}(#{sg.id})"), sg.id.to_s] }.each do |entry|
+	  sg_arr << entry
+	end
+	%>
+	<%= options_for_select(sg_arr, :selected => @server_group_id) %>
+	</select>
+</form>
+
+<div id="servers-table">
+    <%= render :partial => 'table' %>
+</div>
+
+</div>

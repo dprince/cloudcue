@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>CloudCue</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js" type="text/javascript"></script>
+    <%= javascript_include_tag "application" %>
+    <%= stylesheet_link_tag    "application" %>
+    <%= csrf_meta_tag %>
+
+<script type="text/javascript">
+	$(function() {
+		$("a.button").button();
+	});
+</script>
+
+  </head>
+<body>
+
+<div id="header_font_div">CloudCue: Online Help</div>
+<br class="clear"/>
+
+<table class="ui-widget ui-widget-content data" width="100%">
+  <tr class="ui-widget-header">
+    <th>&nbsp;</th>
+  </tr>
+  <tr>
+    <td>
+
+<a href="/main" class="button">Back to CloudCue</a>
+<hr/>
+
+<div>
+<b>Summary:</b>
+<p>
+A web application with a REST based HTTP interface to create groups of servers in the cloud. Supports reserving and managing a pool of servers. A simple web UI is also available to view, monitor, and delete existing server groups.
+</p>
+</div>
+<hr/>
+
+<div>
+<b>Features:</b>
+<p>
+
+<ul>
+<li>Create a group of servers with a single XML HTTP POST request.</li>
+<li>Validates network access to and between servers</li>
+<li>Easy (scriptable) access to the server group via SSH using public keys.</li>
+<li>Automatically sets hostnames for each machine.</li>
+<li>Useful when creating dev/test groups in parallel.</li>
+</ul>
+
+</p>
+</div>
+<hr/>
+
+
+<div>
+<b>Access</b>
+<p>
+Requires a username:password to view the web application and submit REST API requests.
+</p>
+</div>
+<hr/>
+
+<div>
+<b>API:</b>
+<p>
+
+<ul>
+<li><b>GET /server_groups.xml</b>: get a list of existing server groups</li>
+<li><b>GET /server_groups/1.xml</b>: show information for a specific server group</li>
+<li><b>POST /server_groups.xml</b>: create a new server group (see example below)</li>
+<li><b>DELETE /server_groups/1.xml</b>: destroy a server group</li>
+<li><b>GET /servers.xml</b>: get a list of existing servers</li>
+<li><b>GET /server/1.xml</b>: show information for a specific server</li>
+<li><b>GET /server_errors.xml</b>: get a list of all server errors</li>
+</ul>
+
+</p>
+</div>
+<hr/>
+
+<div>
+<b>Example: creating a server group using Curl</b>
+<p>
+Create an XML file containing the following example data. Name the file example.xml.
+</p>
+
+<pre>
+	&lt;server-group&gt;
+	  &lt;name&gt;mail&lt;/name&gt;
+	  &lt;domain-name&gt;mydomain.net&lt;/domain-name&gt;
+	  &lt;description&gt;Mail Dev Group&lt;/description&gt;
+	  &lt;owner-name&gt;dan&lt;/owner-name&gt;
+		&lt;servers type="array"&gt;
+			&lt;server&gt;
+			  &lt;name&gt;boot1&lt;/name&gt;
+			  &lt;description&gt;Boot 1&lt;/description&gt;
+			  &lt;flavor-id&gt;2&lt;/flavor-id&gt;
+			  &lt;image-id&gt;14&lt;/image-id&gt;
+			  &lt;gateway type="boolean"&gt;true&lt;/gateway&gt;
+			&lt;/server&gt;
+			&lt;server&gt;
+			  &lt;name&gt;gate1&lt;/name&gt;
+			  &lt;description&gt;Gate 1&lt;/description&gt;
+			  &lt;flavor-id&gt;2&lt;/flavor-id&gt;
+			  &lt;image-id&gt;14&lt;/image-id&gt;
+			&lt;/server&gt;
+			&lt;server&gt;
+			  &lt;name&gt;relay1&lt;/name&gt;
+			  &lt;description&gt;Gate 1&lt;/description&gt;
+			  &lt;flavor-id&gt;2&lt;/flavor-id&gt;
+			  &lt;image-id&gt;14&lt;/image-id&gt;
+			&lt;/server&gt;
+		&lt;/servers&gt;
+		&lt;ssh-public-keys type="array"&gt;
+			&lt;ssh-public-key&gt;
+				&lt;description&gt;Dan's Key&lt;/description&gt;
+				&lt;public-key&gt;ssh-rsa AAAAB3NzaC1yc2EAAAABI...&lt;/public-key&gt;
+			&lt;/ssh-public-key&gt;
+		&lt;/ssh-public-keys&gt;
+	&lt;/server-group&gt;
+</pre>
+
+<p>
+
+Run the following example curl request:
+
+<pre>
+	curl -k -u username:password -d "@example.xml" http://localhost:3000/server_groups.xml
+</pre>
+
+** Where the Server Groups XML data file is named example.xml in the current working directory
+
+</p>
+
+</div>
+<hr/>
+
+<div>
+<b>Example: SSH into the server group</b>
+<p>
+The following set of instructions explains how to SSH generate ssh keys, add them to your server group when it is created, and then SSH into the gateway server.
+
+<ol>
+<li>Generate a SSH public key pair. This is a one time operation that should be performed on your workstation. Example:
+<pre>
+	$ ssh-keygen
+</pre>
+</li>
+<li>Obtain your SSH public key. Example:
+<pre>
+	$ cat ~/.ssh/id_rsa.pub
+</pre>
+</li>
+<li>Add your SSH public key into the &lt;public-keys&gt; section of your server groups XML requests. See the example.xml server groups request above for more information. The key will then automatically get installed into the authorized_keys file of the root user on the gateway server machine. Multiple keys may be specified to allow multiple users access to a specific server group.</li>
+<li>Once the servers are online ssh into the machine using the public IP address of the SSH gateway machine. Example:
+<pre>
+	$ ssh root@123.123.123.123
+</pre>
+</li>
+<li>From the root account on the gateway server you should automatically have SSH access to all the servers in your server group. The gateway server can SSH into all the clients however the clients cannot SSH into each other.</li>
+</ol>
+</p>
+</div>
+
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

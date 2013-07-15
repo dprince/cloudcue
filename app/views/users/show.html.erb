@@ -1,0 +1,77 @@
+<% if @user.id == session[:user_id] then %>
+<h2>Settings</h2>
+<% else %>
+<h1>Settings: <%= @user.username %></h1>
+<% end %>
+
+<div id="my-settings-messages" class="ui-widget" style="display: none">
+    <div class="ui-state-highlight ui-corner-all" style="padding: .25em .25em .25em 2.5em;">
+<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+<div id="my-settings-messages-content"></div>
+</p>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+function reset_settings_message() {
+
+$("#my-settings-messages").hide();
+$("#my-settings-messages-content").html("");
+
+}
+
+function append_settings_message(msg) {
+
+$("#my-settings-messages").show();
+$("#my-settings-messages-content").append(msg);
+
+}
+
+$(document).ready(function() {
+  $("#settings-accordion").accordion({
+    autoHeight: false,
+    change: function(event, ui) {
+      reset_my_account_divs();
+      reset_my_password_divs();
+      reset_my_ssh_public_keys_divs();
+      reset_my_pool_divs();
+      reset_settings_message();
+      reset_my_account_limit_divs();
+      if (ui.newHeader.text() === "API Limits") {
+        load_my_api_limits();
+      }
+    }
+  });
+});
+
+</script>
+
+<div id="settings-accordion">
+
+    <h3><a href="#">API Credentials</a></h3>
+    <div>
+<%= render :partial => 'account' %>
+    </div>
+
+    <h3><a href="#">API Limits</a></h3>
+    <div>
+<%= render :partial => 'api_limits' %>
+    </div>
+
+    <h3><a href="#">SSH Public Keys</a></h3>
+    <div>
+<%= render :partial => 'ssh_public_keys' %>
+    </div>
+
+    <h3><a href="#">Pools</a></h3>
+    <div>
+<%= render :partial => 'pools' %>
+    </div>
+
+    <h3><a href="#">Change Password</a></h3>
+    <div>
+<%= render :partial => 'password' %>
+    </div>
+
+</div>

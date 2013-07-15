@@ -1,0 +1,22 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: Group 1
+  domain_name: test.rsapps.net
+  description: Group 1 Description
+  owner_name: bob
+  user: bob
+
+two:
+  name: Group 2
+  domain_name: test.rsapps.net
+  description: Group 2 Description
+  owner_name: jim
+  user: jim
+
+history:
+  name: Group History
+  domain_name: test.rsapps.net
+  description: Group 2 Description
+  owner_name: admin
+  user: admin

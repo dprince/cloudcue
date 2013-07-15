@@ -1,0 +1,64 @@
+<script type="text/javascript">
+
+function load_my_api_limits() {
+
+	$("#my_account_limits").html("<b>Loading API Limits...</b>");
+
+    $.ajax({
+        url: '/accounts/<%= @account.id %>/limits',
+        type: 'GET',
+        success: function(data) {
+			var obj = jQuery.parseJSON(data);
+			limit_html="<ul>";
+			limit_html+="<li>Max RAM (GB): <b>"+parseInt(obj.absolute.maxTotalRAMSize)/1024+"</b></li>";
+			limit_html+="<li>Used RAM (GB): <b>"+parseInt(obj.absolute.totalRAMUsed)/1024+"</b></li>";
+			limit_html+="<li>Max Total Instances: <b>"+parseInt(obj.absolute.maxTotalInstances)+"</b></li>";
+			limit_html+="<li>Used Total Instances: <b>"+parseInt(obj.absolute.totalInstancesUsed)+"</b></li>";
+			limit_html+="</ul>";
+			limit_html+="<table style=\"margin-left: 20px;\" border=\"1\">";
+			limit_html+="<tr>";
+			limit_html+="<th>Type/URL</th>";
+			limit_html+="<th>Limit</th>";
+			limit_html+="</tr>";
+
+			for (i=0; i<obj.rate.length; i++) {
+				limit_html+="<tr>";
+				limit_html+="<td>"+obj.rate[i].verb+" "+obj.rate[i].regex+"</td>";
+				limit_html+="<td><b>"+obj.rate[i].value+"</b> per "+obj.rate[i].unit+"</td>";
+				limit_html+="</tr>";
+
+			}
+
+			limit_html+="</table>";
+
+			$("#my_account_limits").html(limit_html);
+        },
+        error: function(data) {
+			$("#my_account_limits").html("");
+            $("#my-account-limits-messages").css("display", "inline");
+            err_html="<ul>";
+                err_html+="<li>Failed to load account limits. Please verify your account information.</li>";
+            err_html+="</ul>";
+            $("#my-account-limits-messages-content").html(err_html);
+        }
+    });
+
+}
+
+function reset_my_account_limit_divs() {
+  $("#my-account-limits-messages").css("display", "none");
+  $("#my-account-limits-messages-content").html("");
+  $("#my_account_limits").html("");
+}
+
+</script>
+
+<div id="my-account-limits-messages" class="ui-widget" style="display: none">
+    <div class="ui-state-error ui-corner-all" style="padding: .25em .25em .25em 2.5em;">
+<p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+<div id="my-account-limits-messages-content"></div>
+</p>
+    </div>
+</div>
+
+<div id="my_account_limits"></div>

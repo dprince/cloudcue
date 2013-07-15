@@ -1,0 +1,4 @@
+check process resque_worker
+  with pidfile /opt/pool_stack/tmp/pids/resque_worker.pid
+  start program = "/bin/sh -c 'WORKER_ID=0 RAILS_ENV=production QUEUE=linux VERBOSE=1 /opt/pool_stack/script/start_worker'" as uid pool_stack and gid pool_stack
+  stop program = "/bin/sh -c 'cd /opt/pool_stack && kill -s QUIT `cat tmp/pids/resque_worker.pid` && rm -f tmp/pids/resque_worker.pid; exit 0;'"

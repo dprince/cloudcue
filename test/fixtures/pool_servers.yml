@@ -1,0 +1,13 @@
+pool1:
+  flavor_ref: 2
+  image_ref: 1
+  pool: admin_pool
+  account: admin_account
+  status: "Active"
+
+pool2:
+  flavor_ref: 2
+  image_ref: 1
+  pool: admin_pool
+  account: admin_account
+  status: "Pending"

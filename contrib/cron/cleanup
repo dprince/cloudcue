@@ -1,0 +1,1 @@
+*/15 * * * * cloudcue cd /opt/cloudcue && RAILS_ENV=production PATH=/usr/local/bin/:$PATH ./script/rails runner ./contrib/runner_scripts/cleanup_servers.rb

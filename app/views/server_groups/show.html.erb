@@ -1,0 +1,12 @@
+<p>
+  <b>Name:</b>
+  <%= @server_group.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @server_group.description %>
+</p>
+
+<%= link_to 'Edit', edit_server_group_path(@server_group) %> |
+<%= link_to 'Back', server_groups_path %>

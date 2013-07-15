@@ -1,0 +1,32 @@
+<p>
+  <b>Name:</b>
+  <%= @server.name %>
+</p>
+
+<p>
+  <b>External ip addr:</b>
+  <%= @server.external_ip_addr %>
+</p>
+
+<p>
+  <b>Internal ip addr:</b>
+  <%= @server.internal_ip_addr %>
+</p>
+
+<p>
+  <b>Flavor:</b>
+  <%= @server.flavor_id %>
+</p>
+
+<p>
+  <b>Image:</b>
+  <%= @server.image_id %>
+</p>
+
+<p>
+  <b>Group:</b>
+  <%= @server.server_group_id %>
+</p>
+
+<%= link_to 'Edit', { :controller => "servers", :action => "edit", :id => @server.id } %> |
+<%= link_to 'Back', servers_path %>

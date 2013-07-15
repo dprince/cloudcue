@@ -1,0 +1,11 @@
+admin_pool:
+  user: admin
+  flavor_ref: 2
+  image_ref: 1
+  size: 4
+
+jim_pool:
+  user: jim
+  flavor_ref: 2
+  image_ref: 1
+  size: 4

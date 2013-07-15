@@ -1,0 +1,22 @@
+<div id="server_groups" class="ui-widget">
+
+<script>
+
+    globalRefreshURL="/server_groups"
+    globalRefreshDivId="#server-groups-table"
+
+    $(document).ready(function() {
+        server_group_selectors();
+    });
+
+</script>
+
+<h3>Groups</h3>
+
+<%= link_to 'New Group', { :controller => "server_groups", :action => "new" }, { :id => "server-group-new-link", :class => "server-group-create" } %><br/><br/>
+
+<div id="server-groups-table">
+    <%= render :partial => 'table' %>
+</div>
+
+</div>

@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+admin_account:
+  username: blahblah
+  api_key: ABABABABABA
+  user: admin
+  connection_type: rackspace
+
+bob_account:
+  username: blahblah
+  api_key: ABABABABABA
+  user: bob
+  connection_type: rackspace
+
+jim_account:
+  username: blahblah
+  api_key: ABABABABABA
+  user: jim
+  connection_type: rackspace

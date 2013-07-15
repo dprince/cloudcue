@@ -1,0 +1,58 @@
+<script>
+
+    $(document).ready(function() {
+        server_history_table_selectors();
+    });
+
+</script>
+
+<%= will_paginate @servers, :params => {:layout => false}, :class => "server-history-paginate" %>
+
+<table class="ui-widget ui-widget-content data">
+  <tr class="ui-widget-header">
+    <th>Group (ID)</th>
+	<th>Owner</th>
+	<th>Account</th>
+    <th>Server Name</th>
+    <th>Created at</th>
+    <th>CS ID</th>
+    <th>Flavor</th>
+    <th>Image</th>
+    <th>Gateway<br/>Server</th>
+    <th>Historical<br/>Status</th>
+    <th>Retries</th>
+    <th>Last Error Msg</th>
+  </tr>
+
+<% @servers.each do |server| %>
+  <tr class="<%= cycle "tr0", "tr1" %>">
+    <td><%= raw chop_for_html(server.server_group.name, 20) %>(<%= server.server_group.id %>)</td>
+    <td><%= raw chop_for_html(server.server_group.owner_name) %></td>
+    <td><%= raw chop_for_html(server.account.username) %></td>
+    <td><%= raw chop_for_html(server.name) %></td>
+    <td><%= timestamp(server.created_at.in_time_zone) %></td>
+    <td><%= raw chop_for_html(server.cloud_server_id_number, 15) %></td>
+    <td><%= flavor_name(server.flavor_id) %></td>
+    <td><%= raw chop_for_html(image_name(server.image_id), 15) %></td>
+    <td align="center"><%= raw check_or_blank(server.gateway) %></td>
+    <td nowrap><%= raw status_image(server.status) %></td>
+    <td>
+		<% if server.retry_count > 0 then %>
+		<%= link_to "#{server.retry_count} (view)", "/servers/#{server.id}", { :class => "show-server-history-errors" } %>
+		<% else %>
+			<%= server.retry_count %>
+		<% end %>
+	</td>
+	<% if server.error_message then %>
+		<td><%= raw chop_for_html(server.error_message) %></td>
+	<% else %>
+		<td>&nbsp;</td>
+	<% end %>
+  </tr>
+<% end %>
+
+<% if @servers.size == 0 then %>
+	<td colspan="11">No historical servers.</td>
+<% end %>
+
+</table>
