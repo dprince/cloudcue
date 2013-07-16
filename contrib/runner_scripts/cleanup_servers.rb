@@ -12,17 +12,17 @@ Account.find(:all, :conditions => ["username IS NOT NULL AND username != '' AND 
   conn.all_servers do |server|
 
     exp = Regexp.new("^#{SERVER_NAME_PREFIX}")
-    if server[:name] and server[:name] =~ exp then
+    if server.name and server.name =~ exp then
 
-      pool_server = PoolServer.find(:first, :conditions => ["cloud_server_id = ? AND historical = 0", server[:id]])
-      server_ref = Server.find(:first, :conditions => ["cloud_server_id_number = ? AND historical = 0", server[:id]])
+      pool_server = PoolServer.find(:first, :conditions => ["cloud_server_id = ? AND historical = 0", server.id])
+      server_ref = Server.find(:first, :conditions => ["cloud_server_id_number = ? AND historical = 0", server.id])
 
       if server_ref.nil? and pool_server.nil? then
         begin
-          puts "Account: #{acct.username}, Deleting server ID: #{server[:id]} #{server[:name]}"
+          puts "Account: #{acct.username}, Deleting server ID: #{server.id} #{server.name}"
           Timeout::timeout(30) do
-            conn.update_server(server[:id], {:name => "deleted_#{server[:id]}"})
-            conn.destroy_server(server[:id])
+            conn.update_server(server.id, {:name => "deleted_#{server.id}"})
+            conn.destroy_server(server.id)
           end
         rescue
         end
