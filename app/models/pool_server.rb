@@ -53,6 +53,7 @@ class PoolServer < ActiveRecord::Base
       end
 
       loop_until_server_online(keypair[:private_key])
+      ActiveRecord::Base.connection_handler.verify_active_connections!
 
       @tmp_files.each {|f| f.close(true)} #Remove tmp personalities files
 

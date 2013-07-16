@@ -8,6 +8,8 @@ class ConfigureServer
     JobHelper.handle_retry do
       server = Server.find(id)
       server.loop_until_server_online
+      ActiveRecord::Base.connection_handler.verify_active_connections!
+
       server.inject_keys
 
       #if all servers are online then configure hosts files
