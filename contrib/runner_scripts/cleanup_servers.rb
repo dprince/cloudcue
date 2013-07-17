@@ -25,6 +25,7 @@ Account.find(:all, :conditions => ["username IS NOT NULL AND username != '' AND 
             conn.destroy_server(server.id)
           end
         rescue
+          puts "Error deleting server ID: #{server.id} #{server.name}"
         end
 
       end
