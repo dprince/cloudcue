@@ -92,6 +92,8 @@ echo '#{generate_authorized_keys}' > /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
 echo '#{IO.read(self.server_group.ssh_key_basepath)}' > /root/.ssh/id_rsa
 chmod 600 /root/.ssh/id_rsa
+echo '#{IO.read(self.server_group.ssh_key_basepath+'.pub')}' > /root/.ssh/id_rsa.pub
+chmod 600 /root/.ssh/id_rsa.pub
 EOF_BASH
 }
         retval=$?
