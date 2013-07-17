@@ -47,6 +47,7 @@ class PoolServer < ActiveRecord::Base
           sleep 1
         end
 
+        ActiveRecord::Base.connection_handler.verify_active_connections!
         self.external_ip_addr = server[:public_ip]
         self.internal_ip_addr = server[:private_ip]
         save!
