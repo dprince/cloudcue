@@ -11,7 +11,7 @@ class PoolServer < ActiveRecord::Base
   include Util::SshKeygen
 
   cattr_accessor :server_online_timeout
-  self.server_online_timeout = 600
+  self.server_online_timeout = 800
 
   attr_accessible :pool_id, :flavor_ref, :image_ref, :account_id, :cloud_server_id_number
 
@@ -40,7 +40,7 @@ class PoolServer < ActiveRecord::Base
       save!
 
       server = conn.get_server(server_id)
-      Timeout::timeout(600) do
+      Timeout::timeout(self.server_online_timeout) do
         until server[:public_ip] and server[:private_ip] do
           server = conn.get_server(server_id)
           raise "Server in error state." if server[:status] == 'ERROR'
@@ -93,8 +93,6 @@ class PoolServer < ActiveRecord::Base
     conn = self.account.get_connection
 
     error_message = "Failed to build server."
-
-    timeout = self.server_online_timeout-(Time.now-self.updated_at).to_i
 
     begin
       Timeout::timeout(timeout) do
