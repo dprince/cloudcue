@@ -52,8 +52,7 @@ class RackspaceConnection
   end
 
   def update_server(id, data)
-    server = @cs_conn.servers.get(id)
-    server.update(data)
+    server = @cs_conn.update_server(id, data)
   end
 
   def destroy_server(id)
