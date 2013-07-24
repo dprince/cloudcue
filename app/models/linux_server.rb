@@ -13,7 +13,7 @@ class LinuxServer < Server
     error_message = "Failed to build server."
 
     timeout = self.server_online_timeout-(Time.now-self.updated_at).to_i
-    timeout = 120 if timeout < 120
+    timeout = 360 if timeout < 360
 
     begin
       Timeout::timeout(timeout) do
