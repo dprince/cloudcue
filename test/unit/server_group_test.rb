@@ -7,6 +7,7 @@ class ServerGroupTest < ActiveSupport::TestCase
 	fixtures :servers
 	fixtures :users
 	fixtures :accounts
+	fixtures :images
 
 	test "create" do
 
@@ -93,6 +94,30 @@ class ServerGroupTest < ActiveSupport::TestCase
 				:description => "test description",
 				:flavor_id => 1,
 				:image_id => 1,
+				:account_id => users(:bob).account.id
+			}]
+		)
+		assert sg.valid?, "Server group should be valid."
+		assert sg.save!, "Server group should have saved."
+		assert_equal 1, sg.servers.size
+
+	end
+
+	test "create with a single server with image name" do
+
+		sg=ServerGroup.create(
+			:name => "test1",
+			:user_id => users(:admin).id,
+			:owner_name => "dan",
+			:domain_name => "test.foo.bar",
+			:description => "test1"
+		)
+		sg.update_attributes(
+			:servers_attributes => [{
+				:name => "test1",
+				:description => "test description",
+				:flavor_id => 1,
+				:image_name => 'Test',
 				:account_id => users(:bob).account.id
 			}]
 		)

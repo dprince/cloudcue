@@ -19,7 +19,8 @@ class Server < ActiveRecord::Base
   attr_accessor :base64_command
   has_one :server_command, :dependent => :destroy, :autosave => true
 
-  attr_accessible :name, :description, :flavor_id, :image_id, :account_id, :base64_command, :gateway, :server_group_id, :cloud_server_id_number
+  attr_accessor :image_name
+  attr_accessible :name, :description, :flavor_id, :image_id, :image_name, :account_id, :base64_command, :gateway, :server_group_id, :cloud_server_id_number
 
   def self.new_for_type(params)
 
@@ -81,6 +82,21 @@ class Server < ActiveRecord::Base
     if base64_command then
       ServerCommand.create(:command => Base64.decode64(base64_command), :server_id => self.attributes["id"])
     end
+
+  end
+
+  before_validation :handle_before_validation
+  def handle_before_validation
+
+    if self.image_name then
+      img = Image.find(:first, :conditions => ["account_id = ? and name = ?", self.account_id, self.image_name])
+      if img then
+        self.image_id = img.image_ref
+      else
+        raise "Invalid image ID specified"
+      end
+    end
+
   end
 
   def make_historical
