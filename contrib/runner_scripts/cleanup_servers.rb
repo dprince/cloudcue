@@ -5,9 +5,8 @@ if SERVER_NAME_PREFIX.blank? then
   puts "SERVER_NAME_PREFIX is required in order to use this script."
   exit 1
 end
-Account.find(:all, :conditions => ["username IS NOT NULL AND username != '' AND api_key IS NOT NULL AND api_key != ''"], :group => "api_key").each do |acct|
+Account.find(:all, :conditions => ["username IS NOT NULL AND username != '' AND api_key IS NOT NULL AND api_key != ''"], :group => "api_key, region").each do |acct|
   begin
-  conn = acct.get_connection
   conn = acct.get_connection
   conn.all_servers do |server|
 
