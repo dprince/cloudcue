@@ -17,9 +17,9 @@ class ServerGroupsController < ApplicationController
   end
 
   if is_admin then
-    @server_groups = ServerGroup.paginate :conditions => ["historical = ?", false], :page => params[:page] || 1, :per_page => limit, :order => "name", :include => [ { :user => [:account] } ]
+    @server_groups = ServerGroup.paginate :conditions => ["historical = ?", false], :page => params[:page] || 1, :per_page => limit, :order => "id", :include => [ { :user => [:account] } ]
   else
-    @server_groups = ServerGroup.paginate :conditions => ["user_id = ? AND historical = ?", session[:user_id], false], :page => params[:page] || 1, :per_page => limit, :order => "name", :include => [ { :user => [:account] } ]
+    @server_groups = ServerGroup.paginate :conditions => ["user_id = ? AND historical = ?", session[:user_id], false], :page => params[:page] || 1, :per_page => limit, :order => "id", :include => [ { :user => [:account] } ]
   end
 
     if params[:layout] then
