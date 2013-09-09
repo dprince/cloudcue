@@ -109,7 +109,7 @@ class Server < ActiveRecord::Base
   def create_cloud_server
 
     return if self.status == "Online"
-    if self.retry_count >= 3 then
+    if self.retry_count >= 5 then
       self.status = "Failed"
       save
       return
@@ -157,7 +157,7 @@ class Server < ActiveRecord::Base
         self.add_error_message("Failed to create cloud server.")
       end
       save!
-      sleep 10
+      sleep (5 * ((self.retry_count + 1) ** 2))
       AsyncExec.run_job(CreateCloudServer, self.id)
 
     end
@@ -167,7 +167,7 @@ class Server < ActiveRecord::Base
   def harvest_ip_info
 
     return if self.status == "Online"
-    if self.retry_count >= 3 then
+    if self.retry_count >= 5 then
       self.status = "Failed"
       save
       return
@@ -226,7 +226,7 @@ class Server < ActiveRecord::Base
   def delete_cloud_server(cloud_server_id)
     deleted=false
     retry_count=0
-    until deleted or retry_count >= 3 do
+    until deleted or retry_count >= 5 do
       begin
         retry_count += 1
         self.account_connection.destroy_server(cloud_server_id)
